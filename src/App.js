@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useEffect } from "react";
+import Header from "./Components/Header";
+import PokemonDetails from "./Components/PokemonDetails";
+import { getPokemons, URL } from "./api/PokemonApi";
+import { extractData } from "./Helper/extractData";
+import { useDispatch } from "react-redux";
+import * as types from "./redux/actionType";
+import "./styles/App.css";
 function App() {
+  const dispatch = useDispatch();
+  // intialaze the pokemon state to the best pokemon ever
+  useEffect(() => {
+    getPokemons(`${URL}/pikachu`).then(({ data }) => {
+      dispatch({ type: types.SET_POKEMON, payload: extractData(data) });
+    });
+  }, [dispatch]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="Header">
+        <Header />
+      </div>
+      <div className="PokemonDetails">
+        <PokemonDetails />
+      </div>
     </div>
   );
 }
